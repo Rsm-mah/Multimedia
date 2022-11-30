@@ -1,24 +1,29 @@
 package client;
 
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.util.Scanner;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
+import client.Client;
+import serveur.Serveur;
 
 public class Main_Client {
-    public static void main(String[] args) {
-        try {
-            File audiofile = new File("D:/2eme_Annee/Mr Naina/Multimedia/music/see you again.mp3").getAbsoluteFile();
-        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audiofile);
-        Clip clip = AudioSystem.getClip();
-        clip.open(audioInputStream);
-        clip.start();
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
+    public static void main(String[] args)throws Exception, ClassNotFoundException{
         
+        try{
+            Client client=new Client();
+            client.getClient();
+            
+             
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            //System.out.println(e);
+        }
     }
     
 }
