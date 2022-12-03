@@ -10,16 +10,13 @@ import java.net.*;
 import java.util.Scanner;
 
 public class Serveur {
-    // private final String mp3FileToPlay;
     private Player jlPlayer;
-
-    // public Serveur (String mp3FileToPlay) {
-    //     this.mp3FileToPlay = mp3FileToPlay;
-    // }
 
     public Serveur() {
 
     }
+
+    
 
 
 
