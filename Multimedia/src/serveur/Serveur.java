@@ -58,6 +58,7 @@ public class Serveur {
             bufferedWriter.flush();
             
 
+            ds.close();
             // serveur.Play(str);
         }
         catch(Exception e){
@@ -98,6 +99,7 @@ public class Serveur {
             this.close();
         }
 
+        sc.close();
         return musique;
     }
     

@@ -31,8 +31,8 @@ public class Client {
             serveur.Play(bufferedReader.readLine());
 
 
-
-            // ds.close();
+            
+            ds.close();
         }
         catch(Exception e){
             e.printStackTrace();
