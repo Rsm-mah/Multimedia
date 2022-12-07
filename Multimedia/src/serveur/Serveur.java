@@ -5,9 +5,13 @@ import javazoom.jl.player.Player;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.util.Scanner;
+
+import javax.imageio.ImageIO;
+
 import java.io.*;
 import java.net.*;
-
+import java.nio.ByteBuffer;
+import java.awt.image.BufferedImage;
 
 public class Serveur {
     private Player jlPlayer;
@@ -105,6 +109,31 @@ public class Serveur {
     
     public void close() {
         if (jlPlayer != null) jlPlayer.close();
+    }
+
+
+
+    public void send_Image_Serveur() throws Exception{
+        ServerSocket serverSocket = new ServerSocket(3000);
+        Socket socket = serverSocket.accept();
+        OutputStream outputStream = socket.getOutputStream();
+
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+
+        BufferedImage image = ImageIO.read(new File("D:/2eme_Annee/Mr Naina/Streaming/images/"+bufferedReader.readLine()));
+    
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ImageIO.write(image, "jpg", byteArrayOutputStream);
+        byte[] size = ByteBuffer.allocate(4).putInt(byteArrayOutputStream.size()).array();
+        outputStream.write(size);
+        outputStream.write(byteArrayOutputStream.toByteArray());
+        outputStream.flush();
+        System.out.println("Flushed: " + System.currentTimeMillis());
+        Thread.sleep(120000);
+        System.out.println("Closing: " + System.currentTimeMillis());
+        serverSocket.close();
+        socket.close();
     }
 
     
