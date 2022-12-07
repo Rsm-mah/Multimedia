@@ -72,7 +72,7 @@ public class Serveur {
     public String Play(String music) {
         String musique = music;
         try {
-            FileInputStream fileInputStream = new FileInputStream("D:/2eme_Annee/Mr Naina/Multimedia/music/"+musique);
+            FileInputStream fileInputStream = new FileInputStream("D:/2eme_Annee/Mr Naina/Multimedia/Multimedia/music/"+musique);
             BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
             jlPlayer = new Player(bufferedInputStream);
 
