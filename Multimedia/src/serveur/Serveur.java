@@ -1,140 +1,146 @@
 package serveur;
 
-import javazoom.jl.player.Player;
+// import javazoom.jl.player.Player;
 
-import java.io.BufferedInputStream;
+// import java.io.BufferedInputStream;
+// import java.io.FileInputStream;
+// import java.util.Scanner;
+
+// import javax.imageio.ImageIO;
+
+// import java.io.*;
+// import java.net.*;
+// import java.nio.ByteBuffer;
+// import java.awt.image.BufferedImage;
+
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
-import java.util.Scanner;
-
-import javax.imageio.ImageIO;
-
-import java.io.*;
-import java.net.*;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.nio.ByteBuffer;
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
 
+import javax.imageio.ImageIO;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
+import affichage.ConteneurFenetre;
+import uk.co.caprica.vlcj.player.component.EmbeddedMediaListPlayerComponent;
+
 public class Serveur {
-    private Player jlPlayer;
+    // private Player jlPlayer;
+    
+
 
     public Serveur() {
 
     }
 
+
+    public void get_serveur() throws Exception {
+        DataOutputStream dataOutputStream = null;
+        DataInputStream dataInputStream = null;
+        Socket s=null;
+
+        ServerSocket servsock = new ServerSocket(3000);
+  
+        Socket socket = servsock.accept();
+        DataOutputStream out = new DataOutputStream(socket.getOutputStream());
     
-
-
-
-
-    public void getServeur() throws IOException, ClassNotFoundException {
-        ServerSocket serverSocket = null;
-        Socket socket = new Socket();
+        File file = new File("D:/2eme_Annee/Mr Naina/Multimedia/Multimedia/images/image_web_1.jpg");
+        out.writeUTF(file.getName().toLowerCase());
+    
+        File fichierMp3 = new File("D:/2eme_Annee/Mr Naina/Multimedia/Multimedia/music/see you agin.mp3");
+        out.writeUTF(fichierMp3.getName().toLowerCase());
+    
+        File fichier = new File("D:/2eme_Annee/Mr Naina/Multimedia/Multimedia/video/video1.mp4");
+        dataOutputStream = new DataOutputStream(socket.getOutputStream());
+        dataOutputStream.writeUTF(fichier.getName().toLowerCase());
+  
+        while(true) {
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            String demande = (String) ois.readObject();
+            System.out.println("Ito ilay demande "+demande);
+            
+    
+            if(demande.contains(".jpg")) {
+                System.out.println("Hahazo sary tsara be ianao !");
+                ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                oos.writeObject(demande);
         
-        try{
-            System.out.println("Miandry connexion Client...");
-            serverSocket = new ServerSocket(3000);
-            socket = serverSocket.accept();
-            System.out.println("Tafiditra");
-        }catch(Exception e){
-            e.printStackTrace();
-            System.out.println(e);
-        }
-
-        try{
-            // Serveur serveur = new Serveur();
-            // serveur.getServeur();
-            DatagramSocket ds = new DatagramSocket(3000);  
-            byte[] buf = new byte[1024];  
-            DatagramPacket dp = new DatagramPacket(buf, 1024);  
-            ds.receive(dp);  
-            String str = new String(dp.getData(), 0, dp.getLength());  
-            
-
-            Serveur serveur = new Serveur();
-            // serverSocket = new ServerSocket(3000);
-            // socket = serverSocket.accept();
-            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-            String reponse = null;
-            System.out.println(str);
-            reponse = str;
-            bufferedWriter.write(reponse);
-            bufferedWriter.newLine();
-            bufferedWriter.flush();
-            
-
-            ds.close();
-            // serveur.Play(str);
-        }
-        catch(Exception e){
-            System.out.println("Client deconnecter");
-        }
-    }
-
-
-
-
-    public String Play(String music) {
-        String musique = music;
-        try {
-            FileInputStream fileInputStream = new FileInputStream("D:/2eme_Annee/Mr Naina/Multimedia/Multimedia/music/"+musique);
-            BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
-            jlPlayer = new Player(bufferedInputStream);
-
-        } catch (Exception e) {
-            System.out.println("Problem playing mp3 file ");
-            System.out.println(e.getMessage());
-        }
-
-        new Thread() {
-            public void run() {
-                try {
-                    jlPlayer.play();
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
+                /* Envoyer Image */
+                OutputStream outputStream=socket.getOutputStream();
+                BufferedImage image=ImageIO.read(file);
+                ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+                ImageIO.write(image, "jpg",byteArrayOutputStream );
+                byte[] size =ByteBuffer.allocate(4).putInt(byteArrayOutputStream.size()).array();
+        
+                outputStream.write(size);
+                outputStream.write(byteArrayOutputStream.toByteArray());
+                outputStream.flush();
+                System.out.println("Sending image......");
+                System.out.println("Flushed "+System.currentTimeMillis());
             }
-        }.start();
-
-        Scanner sc = new Scanner(System.in);
-
-        System.out.println("Write stop to stop the music: ");
-
-        if (sc.nextLine().equalsIgnoreCase("stop")) {
-            this.close();
+  
+        if(demande.contains(".mp3")) {
+            System.out.println("Hahazo hira tsara be ianao !");
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+            oos.writeObject(demande);
+    
+            /* Envoyer Musique */
+            FileInputStream inputStream = new FileInputStream(fichierMp3);
+            byte[] mybytearray = inputStream.readAllBytes();
+    
+            
+            while (true) {
+                System.out.println("Connected");
+                System.out.println(socket.getInetAddress());
+                out.writeUTF(fichierMp3.getName().toLowerCase());
+                out.write(mybytearray);
+            }
         }
+  
+        if(demande.contains(".mp4")) {
+            System.out.println("Hahazo video tsara be ianao !");
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+            oos.writeObject(demande);
+            
+            /* Envoyer vidéo */
+            try {
+                System.out.println("Connecting...");
 
-        sc.close();
-        return musique;
+                InputStream is = new FileInputStream(new File("D:/2eme_Annee/Mr Naina/Multimedia/Multimedia/video/video1.mp4"));
+                byte[] bytes = new byte[1024];
+
+                OutputStream stream = socket.getOutputStream();
+                int count = is.read(bytes, 0, 1024);
+                    while (count != -1){
+                        stream.write(bytes, 0, 1024);
+                        count = is.read(bytes, 0, 1024);
+                    }
+
+                    is.close();
+                    stream.close();
+                    socket.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+      
     }
-    
-    public void close() {
-        if (jlPlayer != null) jlPlayer.close();
-    }
-
-
-
-    public void send_Image_Serveur() throws Exception{
-        ServerSocket serverSocket = new ServerSocket(3000);
-        Socket socket = serverSocket.accept();
-        OutputStream outputStream = socket.getOutputStream();
-
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-
-        BufferedImage image = ImageIO.read(new File("D:/2eme_Annee/Mr Naina/Streaming/images/"+bufferedReader.readLine()));
-    
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        ImageIO.write(image, "jpg", byteArrayOutputStream);
-        byte[] size = ByteBuffer.allocate(4).putInt(byteArrayOutputStream.size()).array();
-        outputStream.write(size);
-        outputStream.write(byteArrayOutputStream.toByteArray());
-        outputStream.flush();
-        System.out.println("Flushed: " + System.currentTimeMillis());
-        Thread.sleep(120000);
-        System.out.println("Closing: " + System.currentTimeMillis());
-        serverSocket.close();
-        socket.close();
     }
 
-    
-}
+} 
+
