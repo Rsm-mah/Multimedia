@@ -1,12 +1,8 @@
 package client;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -15,7 +11,6 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -25,9 +20,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import javazoom.jl.player.Player;
 import mp3.Mp3;
-//import uk.co.caprica.vlcj.component.EmbeddedMediaListPlayerComponent;
-
-
 import uk.co.caprica.vlcj.player.component.EmbeddedMediaListPlayerComponent;
 
 
@@ -40,8 +32,6 @@ public class Client {
 
 
     public void get_client() throws Exception {
-        DataOutputStream dataOutputStream = null;
-        DataInputStream dataInputStream = null;
         
         Socket clientSocket = new Socket("localhost",3000);
         DataInputStream data = new DataInputStream(clientSocket.getInputStream());
@@ -61,7 +51,6 @@ public class Client {
             public void actionPerformed(ActionEvent e)
             {
                 try {
-                    // ObjectOutputStream oos = new ObjectOutputStream(clientSocket.getOutputStream());
                     oos.writeObject(e.getActionCommand());
                     oos.flush();
                     System.out.println("You clicked "+e.getActionCommand());
@@ -79,7 +68,6 @@ public class Client {
             public void actionPerformed(ActionEvent e)
             {
                 try {
-                    // ObjectOutputStream oos = new ObjectOutputStream(clientSocket.getOutputStream());
                     oos.writeObject(e.getActionCommand());
                     oos.flush();
                     System.out.println("You clicked "+e.getActionCommand());
@@ -96,7 +84,6 @@ public class Client {
             public void actionPerformed(ActionEvent e)
             {
                 try {
-                    // ObjectOutputStream oos = new ObjectOutputStream(clientSocket.getOutputStream());
                     oos.writeObject(e.getActionCommand());
                     System.out.println("You clicked "+e.getActionCommand());
                 } catch (Exception exp) {
@@ -143,8 +130,6 @@ public class Client {
         }
 
         if(envoye.contains(".mp3")) {
-            
-            /* Envoyer photos */
             int len = 1000000;
             byte[] mybytearray = new byte[len];
 
@@ -211,32 +196,11 @@ public class Client {
 }
 
 
-
-
-    
-
     public static void play(byte[] data) throws Exception {
-        // DataInputStream in = new DataInputStream(new ByteArrayInputStream(data));
-        // Player player = new Player(in);
-        // player.play();
-        Player jlPlayer;
-            
-                    FileInputStream fileInputStream = new FileInputStream("D:/2eme_Annee/Mr Naina/Multimedia/Multimedia/music/see you again.mp3");
-                    BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
-                    jlPlayer = new Player(bufferedInputStream);
+        DataInputStream in = new DataInputStream(new ByteArrayInputStream(data));
+        Player player = new Player(in);
+        player.play();
         
-                
-        
-                new Thread() {
-                    public void run() {
-                        try {
-                            
-                            jlPlayer.play();
-                        } catch (Exception e) {
-                            System.out.println(e.getMessage());
-                        }
-                    }
-                }.start();
     }
 
 }

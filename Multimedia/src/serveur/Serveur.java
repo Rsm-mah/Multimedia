@@ -1,24 +1,9 @@
 package serveur;
 
-// import javazoom.jl.player.Player;
-
-// import java.io.BufferedInputStream;
-// import java.io.FileInputStream;
-// import java.util.Scanner;
-
-// import javax.imageio.ImageIO;
-
-// import java.io.*;
-// import java.net.*;
-// import java.nio.ByteBuffer;
-// import java.awt.image.BufferedImage;
-
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -26,23 +11,10 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
-import java.awt.Canvas;
-import java.awt.Color;
-import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
-
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-
-import affichage.ConteneurFenetre;
-import uk.co.caprica.vlcj.player.component.EmbeddedMediaListPlayerComponent;
 
 public class Serveur {
-    // private Player jlPlayer;
-    
-
 
     public Serveur() {
 
@@ -51,7 +23,6 @@ public class Serveur {
 
     public void get_serveur() throws Exception {
         DataOutputStream dataOutputStream = null;
-        DataInputStream dataInputStream = null;
         Socket s=null;
 
         ServerSocket servsock = new ServerSocket(3000);
@@ -62,7 +33,7 @@ public class Serveur {
         File file = new File("D:/2eme_Annee/Mr Naina/Multimedia/Multimedia/images/image_web_1.jpg");
         out.writeUTF(file.getName().toLowerCase());
     
-        File fichierMp3 = new File("D:/2eme_Annee/Mr Naina/Multimedia/Multimedia/music/see you agin.mp3");
+        File fichierMp3 = new File("D:/2eme_Annee/Mr Naina/Multimedia/Multimedia/music/see you again.mp3");
         out.writeUTF(fichierMp3.getName().toLowerCase());
     
         File fichier = new File("D:/2eme_Annee/Mr Naina/Multimedia/Multimedia/video/video1.mp4");
