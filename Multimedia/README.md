@@ -1,3 +1,7 @@
+## Etudiant
+RASAMISOA Mahefa Andriniaina
+ETU1877
+
 ## Projet Socket Multimedia
 Ce projet consiste à faire un socket entre un client et un serveur. Le client peut alors écouter de la musique,voir une image ou lire une vidéo.
 
